@@ -1,0 +1,52 @@
+﻿@model DRS.ViewModels.OrderActionViewModel
+
+@if (Model != null)
+{
+    <div class="modal-content">
+        <div class="modal-header">
+            <h5 class="modal-title">
+                <span>Information</span>
+            </h5>
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+            </button>
+        </div>
+        <div class="modal-body">
+            <form id="actionForm">
+                <input type="hidden" name="_Id" value="@Model.ID" />
+            </form>
+            <h3>Contact The Supplier</h3>
+            <h5>@Model.Note</h5>
+            <h5>@Model.Plate</h5>
+
+            <div class="alert alert-danger" role="alert">
+                Are you sure you want to delete this Order?
+            </div>
+        </div>
+        <div class="modal-footer">
+            @*<button id="actionButton" type="button" class="btn btn-danger"><i class="fas fa-trash-alt mr-1"></i> Delete</button>*@
+            <button type="button" class="btn btn-secondary" data-dismiss="modal"><i class="fas fa-times mr-1"></i> Close</button>
+        </div>
+    </div>
+}
+
+<script>
+    $("#actionButton").click(function () {
+        $("#actionButton").attr("disabled", "disabled");
+        showLoadingSpinner();
+		$.ajax({
+			url: '@Url.Action("Delete", "Order")',
+			type: "post",
+			data: $("#actionForm").serialize()
+		})
+		.done(function (response) {
+			if(response.success)
+			{
+				window.location.href = "@Url.Action("Index", "Order")";
+			}
+			else {
+				$(".errorDiv").html(response.Message);
+			}
+		});
+	});
+</script>

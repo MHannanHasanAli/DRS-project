@@ -1,0 +1,16 @@
+C:\Users\Hannan\Desktop\DRS-master\DRS.Entities\bin\Release\DRS.Entities.dll.config
+C:\Users\Hannan\Desktop\DRS-master\DRS.Entities\bin\Release\DRS.Entities.dll
+C:\Users\Hannan\Desktop\DRS-master\DRS.Entities\bin\Release\DRS.Entities.pdb
+C:\Users\Hannan\Desktop\DRS-master\DRS.Entities\bin\Release\EntityFramework.dll
+C:\Users\Hannan\Desktop\DRS-master\DRS.Entities\bin\Release\EntityFramework.SqlServer.dll
+C:\Users\Hannan\Desktop\DRS-master\DRS.Entities\bin\Release\Microsoft.AspNet.Identity.Core.dll
+C:\Users\Hannan\Desktop\DRS-master\DRS.Entities\bin\Release\Microsoft.AspNet.Identity.EntityFramework.dll
+C:\Users\Hannan\Desktop\DRS-master\DRS.Entities\bin\Release\EntityFramework.xml
+C:\Users\Hannan\Desktop\DRS-master\DRS.Entities\bin\Release\EntityFramework.SqlServer.xml
+C:\Users\Hannan\Desktop\DRS-master\DRS.Entities\bin\Release\Microsoft.AspNet.Identity.Core.xml
+C:\Users\Hannan\Desktop\DRS-master\DRS.Entities\bin\Release\Microsoft.AspNet.Identity.EntityFramework.xml
+C:\Users\Hannan\Desktop\DRS-master\DRS.Entities\obj\Release\DRS.Entities.csproj.AssemblyReference.cache
+C:\Users\Hannan\Desktop\DRS-master\DRS.Entities\obj\Release\DRS.Entities.csproj.CoreCompileInputs.cache
+C:\Users\Hannan\Desktop\DRS-master\DRS.Entities\obj\Release\DRS.Entities.csproj.CopyComplete
+C:\Users\Hannan\Desktop\DRS-master\DRS.Entities\obj\Release\DRS.Entities.dll
+C:\Users\Hannan\Desktop\DRS-master\DRS.Entities\obj\Release\DRS.Entities.pdb

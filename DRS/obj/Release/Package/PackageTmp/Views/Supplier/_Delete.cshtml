@@ -1,0 +1,49 @@
+﻿@model DRS.ViewModels.SupplierActionViewModel
+
+@if (Model != null)
+{
+    <div class="modal-content">
+        <div class="modal-header">
+            <h5 class="modal-title">
+                <span>Delete Fornitori</span>
+            </h5>
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+            </button>
+        </div>
+        <div class="modal-body">
+            <form id="actionForm">
+                <input type="hidden" name="_Id" value="@Model.ID" />
+            </form>
+            <div class="alert alert-danger" role="alert">
+                Are you sure you want to delete this Fornitori?
+            </div>
+        </div>
+        <div class="modal-footer">
+            <button id="actionButton" type="button" class="btn btn-danger btn-rounded"><i class="fas fa-trash-alt mr-1"></i> Delete</button>
+            <button type="button" class="btn btn-secondary btn-rounded" data-dismiss="modal"><i class="fas fa-times mr-1"></i> Close</button>
+        </div>
+    </div>
+}
+
+<script>
+    $("#actionButton").click(function () {
+        $("#actionButton").attr("disabled", "disabled");
+        showLoadingSpinner();
+		$.ajax({
+			url: '@Url.Action("Delete", "Supplier")',
+			type: "post",
+			data: $("#actionForm").serialize()
+		})
+		.done(function (response) {
+			if(response.success)
+			{
+				window.location.href = "@Url.Action("Index", "Supplier")";
+			}
+            else {
+                hideLoadingSpinner();
+                alert(response.Message);
+			}
+		});
+	});
+</script>

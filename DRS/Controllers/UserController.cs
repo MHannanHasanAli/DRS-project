@@ -13,6 +13,7 @@ using System.Web.Mvc;
 using OfficeOpenXml;
 using Microsoft.AspNet.Identity.EntityFramework;
 using OfficeOpenXml.Sorting;
+using System.Net.Configuration;
 
 namespace DRS.Controllers
 {
@@ -147,7 +148,7 @@ namespace DRS.Controllers
             return View();
         }
         [HttpPost]
-        public ActionResult Import(HttpPostedFileBase excelfile)
+        public async Task<ActionResult> Import(HttpPostedFileBase excelfile)
         {
             if (excelfile == null || excelfile.ContentLength == 0)
             {
@@ -191,7 +192,30 @@ namespace DRS.Controllers
 
                             if (worksheet.Cells[row, 3].Value != null)
                             {
-                                user.Branch = worksheet.Cells[row, 3].Value.ToString();
+                                var branches = BranchServices.Instance.GetBranchs();
+                                int counter = 0;
+                                foreach (var item in branches)
+                                {
+                                    if(item.Description == worksheet.Cells[row, 3].Value.ToString())
+                                    {
+                                        counter++;
+                                        user.Branch = item.Description; break;
+                                    }
+                                }
+                                
+                                if(counter==0)
+                                {
+                                    var Branch = new Entities.Branch();
+                                    Branch.Description = worksheet.Cells[row, 3].Value.ToString();
+                                    Branch.Email = "Utenti Import";
+                                    Branch.Telephone = "Utenti Import";
+                                    Branch.Whatsapp = "Utenti Import";
+                                    Branch.Note = "Utenti Import";
+                                    user.Branch = worksheet.Cells[row, 3].Value.ToString();
+
+                                    BranchServices.Instance.CreateBranch(Branch);
+                                }
+                                
                             }
                             
                             if (worksheet.Cells[row, 4].Value != null)
@@ -210,16 +234,27 @@ namespace DRS.Controllers
                             {
                                 user.Password = worksheet.Cells[row, 5].Value.ToString();
                             }
-                           
 
-                            var role = RolesManager.FindByIdAsync(user.RoleID);
-                            var UserToBeSaved = new User { UserName = user.Name, Email = user.Name + "@DRS.com", Surname = user.Surname, Branch = user.Branch, Name = user.Name, Role = role.Result.Name, Password = user.Password, Image = user.Image };
-                            var rolesAll = rolesList.Select(x => x.Name).ToList();
-                            if (rolesAll.Contains(UserToBeSaved.Role))
+
+                            var role = await RolesManager.FindByIdAsync(user.RoleID);
+                            var userToBeSaved = new User
                             {
-                                UserManager.CreateAsync(UserToBeSaved, user.Password);
+                                UserName = user.Name,
+                                Email = user.Name + "@DRS.com",
+                                Surname = user.Surname,
+                                Branch = user.Branch,
+                                Name = user.Name,
+                                Role = role.Name,
+                                Password = user.Password,
+                                Image = user.Image
+                            };
 
-                                UserManager.AddToRoleAsync(UserToBeSaved.Id, role.Result.Name);
+                            var rolesAll = rolesList.Select(x => x.Name).ToList();
+
+                            if (rolesAll.Contains(userToBeSaved.Role))
+                            {
+                                await UserManager.CreateAsync(userToBeSaved, user.Password);
+                                await UserManager.AddToRoleAsync(userToBeSaved.Id, role.Name);
                                 items.Add(user);
                             }
                         }
@@ -273,6 +308,7 @@ namespace DRS.Controllers
         {
             UserActionModel model = new UserActionModel();
             model.Roles = RolesManager.Roles.ToList();
+            model.branches = BranchServices.Instance.GetBranch();
             if (!string.IsNullOrEmpty(ID))
             {
                 Session["ACTIVER"] = "User Edit";

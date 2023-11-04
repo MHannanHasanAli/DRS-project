@@ -1,0 +1,380 @@
+﻿
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <title>DRS</title>
+
+
+    <!-- endinject -->
+    <!-- base:css -->
+
+
+    <link rel="stylesheet" href="~/Content/template/vendors/typicons/typicons.css">
+    <link rel="stylesheet" href="~/Content/template/vendors/css/vendor.bundle.base.css">
+    <link rel="stylesheet" href="~/Content/template/vendors/mdi/css/materialdesignicons.min.css" />
+    <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.11.5/css/jquery.dataTables.min.css">
+
+    <!-- endinject -->
+    <!-- plugin css for this page -->
+    <!-- End plugin css for this page -->
+    <!-- inject:css -->
+    <link rel="stylesheet" href="~/Content/template/css/vertical-layout-light/style.css">
+
+    <link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+    <!-- endinject -->
+    <link rel="shortcut icon" href="~/Content/template/images/g-icon-15.jpg" />
+
+    <script src="https://code.jquery.com/jquery-3.6.0.js" integrity="sha256-H+K7U5CnXl1h5ywQfKtSj8PCmoN9aaq30gDh27Xc0jk=" crossorigin="anonymous"></script>
+    <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" integrity="sha512-..." crossorigin="anonymous" />
+
+</head>
+<body>
+    <style>
+        .table th, .table td {
+            padding: 0.7rem 0.9375rem;
+            vertical-align: top;
+            border-top: 1px solid #f3f3f3;
+        }
+        .body {
+            background-color: #F69601;
+        }
+        .loading-spinner-overlay {
+            display: none; /* Initially hidden */
+            position: fixed;
+            top: 0;
+            left: 0;
+            height: 100%;
+            width: 100%;
+            z-index: 9999; /* Ensure it appears above all other content */
+            background-color: rgba(0,0,0,0.5); /* Transparent black */
+        }
+
+
+        .spinner {
+            border: 16px solid #f3f3f3;
+            border-top: 16px solid #3498db;
+            border-radius: 50%;
+            width: 120px;
+            height: 120px;
+            animation: spin 2s linear infinite;
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+        }
+
+        @@keyframes spin {
+            0% {
+                transform: translate(-50%, -50%) rotate(0deg);
+            }
+
+            100% {
+                transform: translate(-50%, -50%) rotate(360deg);
+            }
+        }
+    </style>
+    <div id="loadingSpinner" class="loading-spinner-overlay">
+        <div class="spinner"></div>
+    </div>
+    <div class="container-scroller">
+        <!-- partial:partials/_navbar.html -->
+        <nav class="navbar col-lg-12 col-12 p-0 fixed-top d-flex flex-row">
+            <div style="background-color:dodgerblue;" class="navbar-brand-wrapper d-flex justify-content-center">
+                <div class="navbar-brand-inner-wrapper d-flex justify-content-between align-items-center w-100">
+              <button class="navbar-toggler navbar-toggler align-self-center" type="button" data-toggle="minimize">
+                        <span class="typcn typcn-th-menu"></span>
+                    </button>
+                    <img src="~/Content/Logo/logo_min.png" width="150px" height="50px" />
+                </div>
+            </div>
+            <div class="navbar-menu-wrapper d-flex align-items-center justify-content-end">
+
+                <h1 id="Main-title">Loading...</h1>
+                <ul class="navbar-nav navbar-nav-right">
+                </ul>
+                <button class="navbar-toggler navbar-toggler-right d-lg-none align-self-center" type="button" data-toggle="offcanvas">
+                    <span class="typcn typcn-th-menu"></span>
+                </button>
+            </div>
+        </nav>
+        <!-- partial -->
+
+        <div class="container-fluid page-body-wrapper">
+            <!-- partial:partials/_settings-panel.html -->
+            <div class="theme-setting-wrapper">
+                @*<div id="settings-trigger"><i class="typcn typcn-cog-outline"></i></div>*@
+                <div id="theme-settings" class="settings-panel">
+                    <i class="settings-close typcn typcn-times"></i>
+                    <p class="settings-heading">SIDEBAR SKINS</p>
+                    <div class="sidebar-bg-options selected" id="sidebar-light-theme"><div class="img-ss rounded-circle bg-light border mr-3"></div>Light</div>
+                    <div class="sidebar-bg-options" id="sidebar-dark-theme"><div class="img-ss rounded-circle bg-dark border mr-3"></div>Dark</div>
+                    <p class="settings-heading mt-2">HEADER SKINS</p>
+                    <div class="color-tiles mx-0 px-4">
+                        <div class="tiles success"></div>
+                        <div class="tiles warning"></div>
+                        <div class="tiles danger"></div>
+                        <div class="tiles info"></div>
+                        <div class="tiles dark"></div>
+                        <div class="tiles default"></div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- partial -->
+            <!-- partial:partials/_sidebar.html -->
+            <nav class="sidebar sidebar-offcanvas" id="sidebar">
+                <ul class="nav">
+
+                    @*<li class="nav-item">
+
+            <a class="nav-link" href="@Url.Action("", "")">
+                <i class="typcn typcn-device-desktop menu-icon"></i>
+                <span class="menu-title">Home</span>
+            </a>
+        </li>*@
+                    @if (User.IsInRole("Admin"))
+                    {
+                        <li class="nav-item">
+
+                            <a class="nav-link" href="@Url.Action("Index", "Customer")">
+                                <i class="typcn typcn-user menu-icon"></i>
+                                <span class="menu-title">Clienti</span>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+
+                            <a class="nav-link" href="@Url.Action("Index", "Supplier")">
+                                <i class="typcn typcn-user menu-icon"></i>
+                                <span class="menu-title">Fornitori</span>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+
+                            <a class="nav-link" href="@Url.Action("Index", "Brand")">
+                                <i class="typcn typcn-briefcase menu-icon"></i>
+                                <span class="menu-title">Marca</span>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+
+                            <a class="nav-link" href="@Url.Action("Index", "Branch")">
+                                <i class="typcn typcn-business-card menu-icon"></i>
+                                <span class="menu-title">Filiali</span>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+
+                            <a class="nav-link" href="@Url.Action("Index", "Supplier_Brand")">
+                                <i class="typcn typcn-clipboard menu-icon"></i>
+                                <span class="menu-title">Fornitori/Marca</span>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+
+                            <a class="nav-link" href="@Url.Action("Index", "User")">
+                                <i class="typcn typcn-user menu-icon"></i>
+                                <span class="menu-title">Utenti</span>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+
+                            <a class="nav-link" href="@Url.Action("Index", "Order")">
+                                <i class="typcn typcn-device-desktop menu-icon"></i>
+                                <span class="menu-title">Order Monitor</span>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+
+                            <a class="nav-link" href="@Url.Action("ReceivedOrders", "Order")">
+                                <i class="typcn typcn-tick-outline menu-icon"></i>
+                                <span class="menu-title">Ricevuto Order</span>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+
+                            <a class="nav-link" href="@Url.Action("ConfirmedOrders", "Order")">
+                                <i class="typcn typcn-tick menu-icon"></i>
+                                <span class="menu-title">Confermato Order</span>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+
+                            <a class="nav-link" href="@Url.Action("Logout", "Account")">
+                                <i class="typcn typcn-arrow-left menu-icon"></i>
+                                <span class="menu-title">Logout</span>
+                            </a>
+                        </li>
+                    }
+                    else
+                    {
+                        <li class="nav-item">
+
+                            <a class="nav-link" href="@Url.Action("ReceivedOrders", "Order")">
+                                <i class="typcn typcn-tick-outline menu-icon"></i>
+                                <span class="menu-title">Ricevuto Order</span>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+
+                            <a class="nav-link" href="@Url.Action("Logout", "Account")">
+                                <i class="typcn typcn-arrow-left menu-icon"></i>
+                                <span class="menu-title">Logout</span>
+                            </a>
+                        </li>
+                    }
+
+
+                </ul>
+
+            </nav>
+
+            <!-- partial -->
+            <div class="main-panel">
+                <div class="content-wrapper">
+                    @using (Html.BeginForm("LogOff", "Account", FormMethod.Post, new { id = "logoutForm", @class = "navbar-right" }))
+                    {
+                        @Html.AntiForgeryToken()}
+                    @RenderBody()
+                </div>
+                <!-- content-wrapper ends -->
+                <!-- partial:partials/_footer.html -->
+                <footer class="footer">
+                </footer>
+                <!-- partial -->
+            </div>
+            <!-- main-panel ends -->
+        </div>
+
+        <!-- page-body-wrapper ends -->
+    </div>
+    <!-- container-scroller -->
+    @*<script src="~/Content/template/js/dashboard.js"></script>*@
+
+
+    <!-- base:js -->
+    <script src="~/Content/template/vendors/js/vendor.bundle.base.js"></script>
+    <!-- endinject -->
+    <!-- Plugin js for this page-->
+    <script src="~/Content/template/vendors/chart.js/Chart.min.js"></script>
+    <!-- End plugin js for this page-->
+    <!-- inject:js -->
+    <script src="~/Content/template/js/off-canvas.js"></script>
+    <script src="~/Content/template/js/hoverable-collapse.js"></script>
+    <script src="~/Content/template/js/template.js"></script>
+    <script src="~/Content/template/js/settings.js"></script>
+    <script src="~/Content/template/js/todolist.js"></script>
+    <script>
+        $(document).ready(function () {
+            var data = '@Session["ACTIVER"]';
+
+            if (data == "Order") {
+                $('#Main-title').text("Order Monitor");
+            }
+            if (data == "Order Edit") {
+                $('#Main-title').text("Order Modifica");
+            }
+            if (data == "Add Order") {
+                $('#Main-title').text("Nuovo Order");
+            }
+            if (data == "Order Import") {
+                $('#Main-title').text("Import Orders");
+            }
+            if (data == "Ricevuto Order") {
+                $('#Main-title').text("Ricevuto Order");
+            }
+            if (data == "Confirmed Order") {
+                $('#Main-title').text("Confermato Order");
+            }
+            if (data == "Customer") {
+                $('#Main-title').text("Cliente");
+            }
+            if (data == "Customer Edit") {
+                $('#Main-title').text("Cliente Modifica");
+            }
+            if (data == "Add Customer") {
+                $('#Main-title').text("Nuovo Cliente");
+            }
+            if (data == "Customer Import") {
+                $('#Main-title').text("Import Cliente");
+            }
+            if (data == "Supplier") {
+                $('#Main-title').text("Fornitori");
+            }
+            if (data == "Supplier Edit") {
+                $('#Main-title').text("Fornitori Modifica");
+            }
+            if (data == "Add Supplier") {
+                $('#Main-title').text("Nuovo Fornitori");
+            }
+            if (data == "Supplier Import") {
+                $('#Main-title').text("Import Fornitori");
+            }
+            if (data == "Brand") {
+                $('#Main-title').text("Marca");
+            }
+            if (data == "Brand Edit") {
+                $('#Main-title').text("Marca Modifica");
+            }
+            if (data == "Add Brand") {
+                $('#Main-title').text("Nuovo Marca");
+            }
+            if (data == "Brand Import") {
+                $('#Main-title').text("Import Marca");
+            }
+            if (data == "Branch") {
+                $('#Main-title').text("Filiale");
+            }
+            if (data == "Branch Edit") {
+                $('#Main-title').text("Filiale Modifica");
+            }
+            if (data == "Add Branch") {
+                $('#Main-title').text("Nuovo Filiale");
+            }
+            if (data == "Branch Import") {
+                $('#Main-title').text("Import Filiale");
+            }
+            if (data == "Supplier/Brand") {
+                $('#Main-title').text("Fornitori/Marca Monitor");
+            }
+            if (data == "Supplier/Brand Edit") {
+                $('#Main-title').text("Fornitori/Marca Modifica");
+            }
+            if (data == "Add Supplier/Brand") {
+                $('#Main-title').text("Nuovo Fornitori/Marca");
+            }
+            if (data == "Supplier/Brand Import") {
+                $('#Main-title').text("Import Fornitori/Marca");
+            }
+            if (data == "User") {
+                $('#Main-title').text("Utenti");
+            }
+            if (data == "User Edit") {
+                $('#Main-title').text("Utenti Modifica");
+            }
+            if (data == "Add User") {
+                $('#Main-title').text("Nuovo Utenti");
+            }
+            if (data == "User Import") {
+                $('#Main-title').text("Import Utenti");
+            }
+        })
+        function showLoadingSpinner() {
+            document.getElementById('loadingSpinner').style.display = 'block';
+        }
+
+        function hideLoadingSpinner() {
+            document.getElementById('loadingSpinner').style.display = 'none';
+        }
+    </script>
+    <!-- endinject -->
+    <!-- Custom js for this page-->
+    <!-- End custom js for this page-->
+</body>
+
+</html>
+

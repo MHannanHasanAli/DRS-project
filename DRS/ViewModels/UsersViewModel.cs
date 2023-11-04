@@ -30,6 +30,7 @@ namespace DRS.ViewModels
         public string Password { get; set; }
         public string Image { get; set; }
         public List<IdentityRole> Roles { get; set; }
+        public List<Branch> branches { get; set; }
 
     }
 

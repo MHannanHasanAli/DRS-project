@@ -1,0 +1,66 @@
+﻿
+@{
+    ViewBag.Title = "Import";
+}
+<script src="https://www.appelsiini.net/download/jquery.jeditable.js"></script>
+<style>
+    .top-page {
+        display: flex;
+        justify-content: space-between;
+    }
+
+    .mover {
+        margin-top: -30px;
+    }
+</style>
+<div class="card">
+    <div class="card-body">
+        @using (Html.BeginForm("Import", "Supplier_Brand", FormMethod.Post, new { enctype = "multipart/form-data" }))
+        {
+            @Html.Raw(ViewBag.Error)
+            <br />
+            <div class="top-page">
+                <div>
+                    <span>
+                        Excel File
+                    </span>
+                </div>
+                <div>
+                    <a class="btn btn-success mover" href="@Url.Action("DownloadFile", "Shared", new { path = "~/Content/DemoFiles/SupplierBrandDemoImport.xlsx" })">
+                        <i class="fa fa-download" aria-hidden="true"></i>Demo File
+                    </a>
+                </div>
+            </div>
+
+            <input class="form-control" type="file" name="excelfile" />
+            <br />
+            <input class="btn btn-block btn-outline-primary" type="submit" value="Import" />
+            <br />
+        }
+        <a class="btn btn-block btn-outline-success" href="@Url.Action("Index","Supplier_Brand")">Back to Supplier/Brands</a>
+
+
+        @if (ViewBag.Products != null)
+        {
+            <table class="table table-responsive" cellpadding="2" cellspacing="2" bSupplier_Brand="1">
+                <tr>
+                    
+                    <th>
+                        Status
+                    </th>
+
+                </tr>
+                
+                @foreach (var item in ViewBag.Products)
+                {
+                    <tr>
+                        <td>IMPORTED</td>
+                    </tr>
+                }
+            </table>
+        }
+
+
+    </div>
+</div>
+

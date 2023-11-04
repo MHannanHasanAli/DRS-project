@@ -1,0 +1,350 @@
+﻿@model DRS.ViewModels.OrderListingViewModel
+@using System
+@{
+}
+<style>
+    .blue {
+        background: #3947e7;
+        color: white;
+    }
+
+    .addbtn {
+        border-radius: 50%;
+        padding: 10px;
+        background: black;
+        color: white;
+        border: 1px solid black;
+    }
+
+    .container-top {
+        display: flex;
+    }
+
+    .fa-download {
+        color: blue; /* Set the default color to blue */
+        transition: color 0.3s; /* Add a smooth color transition */
+    }
+
+        .fa-download:hover {
+            color: black; /* Change the color to black on hover */
+        }
+
+    .dataTables_filter {
+        float: right;
+    }
+
+    .top-portion {
+        width: 100%;
+        display: flex;
+        justify-content: space-between;
+    }
+
+    #searchdropdown {
+        margin-left: 30px;
+    }
+</style>
+
+<div>
+    <div class="card">
+
+        <div class="card-body  container-top">
+
+            <br />
+            <div class="top-portion">
+                <div class="input-group-prepend flexer">
+                    <span class="input-group-text"><i class="fa fa-search"></i></span>
+                    <input id="searchbar" class="form-control" placeholder="Search">
+                    <select id="searchdropdown">
+                        <option value="Fornitore">Fornitore</option>
+                        <option value="Marca">Marca</option>
+                        <option value="Alias">Alias</option>
+                        <option value="Cliente">Cliente</option>
+                        <option value="Branch">Branch</option>
+                        <option value="User">User</option>
+                    </select>
+                </div>
+
+                <form>
+
+                    <div class="input-group">
+                        <a href="@Url.Action("Import", "Order")" class=" btn btn-rounded blue"><i class="fas fa-upload"></i>&nbsp; Import</a>
+
+                        <a href="@Url.Action("ExportToExcel", "Order")" class=" btn btn-rounded blue"><i class="fas fa-upload"></i>&nbsp; Export</a>
+
+                        @Html.ValidationSummary("", new { @class = "text-danger" })
+                        <a href="@Url.Action("Action", "Order")" class=" btn btn-rounded blue"><i class="fas fa-plus-square"></i>&nbsp; Aggiungi</a>
+
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+    @if (Model.Order != null)
+    {
+        <section class="content">
+            <div class="container-fluid">
+                <div class="row">
+
+
+                    <div class="card col-md-12">
+
+                        <!-- /.card-header -->
+                        <div class="card-body" style="overflow-x: auto;">
+                            <table id="example1" class="table table-bordered table-striped my-table">
+                                <thead>
+                                    <tr>
+                                        <th>Azioni</th>
+                                        <th>Order Code</th>
+                                        <th>#N</th>
+                                        <th>Fornitore</th>
+                                        <th>Data Ordine</th>
+                                        <th>Marca</th>
+                                        <th>Targa</th>
+                                        <th>Telaio</th>
+                                        <th>Codice</th>
+                                        <th>Codice Alternativo</th>
+                                        <th>Descrizione</th>
+                                        <th>Qnt</th>
+                                        <th>Data Consegna Prevists</th>
+                                        <th>Alias</th>
+                                        <th>Cliente</th>
+                                        <th>Filiale</th>
+                                        <th>Glorni Indisponibilita</th>
+                                        <th>Allegato</th>
+                                        <th>Note</th>
+                                        <th>User</th>
+                                        <th>Sol.1</th>
+                                        <th>Sol.2</th>
+                                        <th>Sol.3</th>
+                                        <th>Azioni</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @foreach (var item in Model.Order)
+                                    {
+                                        <tr>
+                                            <td>
+                                                <div class="dropdown">
+                                                    <button class="btn btn-sm btn-rounded btn-secondary btn-icon-text dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                                        <i class="fa fa-list" aria-hidden="true"></i>
+
+                                                    </button>
+                                                    <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                                                        <a class="dropdown-item" href="@Url.Action("Action", "Order", new { ID = item.IDOrder })">
+                                                            <i class="mdi mdi-pencil"></i> Modifica
+                                                        </a>
+                                                        @*<button data-href="@Url.Action("Delete", "Order", new { ID = item.ID })" class="dropdown-item data-btn btn btn-danger btn-icon-text" data-toggle="modal" data-target="#actionModal"><i class="mdi mdi-delete"></i>DELETE</button>*@
+
+                                                        <a class="data-btn dropdown-item" data-href="@Url.Action("Delete", "Order", new { ID = item.IDOrder })" data-toggle="modal" data-target="#actionModal">
+                                                            <i class="mdi mdi-delete"></i> DELETE
+                                                        </a>
+                                                    </div>
+                                                </div>
+                                            </td>
+                                            <td>@item.IDOrder</td>
+                                            <td>@item.IDItem</td>
+                                            <td>@item.Supplier</td>
+                                            <td>@item.Date.ToString("yyyy-MM-dd")</td>
+                                            <td>@item.Brand</td>
+                                            <td>@item.Plate</td>
+                                            <td>@item.Chassis</td>
+                                            <td>@item.ItemCode</td>
+                                            <td>@item.AlternativeCode</td>
+                                            <td>@item.Description</td>
+                                            <td>@item.Quantity</td>
+                                            @if (item.DeliveryDate == null)
+                                            {
+                                                <td></td>
+                                            }
+                                            else
+                                            {
+                                                <td>@item.DeliveryDate.Value.ToShortDateString()</td>
+                                            }
+
+                                            <td>@item.Alias</td>
+                                            <td>@item.Customer</td>
+                                            <td>@item.Branch</td>
+                                            <td>@item.Unavailability</td>
+                                            <td>
+                                                @if (item.Photo != null)
+                                                {
+                                                    <input type="checkbox" class="form-control" checked disabled />
+
+                                                }
+                                                else
+                                                {
+                                                    <input type="checkbox" class="form-control" disabled />
+                                                }
+                                            </td>
+                                            <td>@item.NoteItem</td>
+                                            <td>@item.User</td>
+                                            @if (item.Reminder1 == null)
+                                            {
+                                                <td></td>
+                                            }
+                                            else
+                                            {
+                                                <td>@item.Reminder1.Value.ToShortDateString()</td>
+
+                                            }
+                                            @if (item.Reminder2 == null)
+                                            {
+                                                <td></td>
+                                            }
+                                            else
+                                            {
+                                                <td>@item.Reminder2.Value.ToShortDateString()</td>
+
+                                            }
+                                            @if (item.Reminder3 == null)
+                                            {
+                                                <td></td>
+                                            }
+                                            else
+                                            {
+                                                <td>@item.Reminder3.Value.ToShortDateString()</td>
+
+                                            }
+
+                                            <td>
+                                                @if (item.Received.ToString().ToLower() == "off")
+                                                {
+                                                    <span class="badge badge-danger">Annulla</span>
+                                                }
+                                                @if (@item.Unavailability > 7 && @item.Unavailability <= 20 && item.Photo == null)
+                                                {
+                                                    <span class="badge badge-success">Videata</span>
+                                                }
+                                                else if (@item.Unavailability > 20)
+                                                {
+                                                    <span class="badge badge-secondary">Sollecita</span>
+                                                }
+                                            </td>
+                                        </tr>
+                                    }
+                                </tbody>
+
+                            </table>
+                            <div id="pagination-container">
+                                <ul id="pagination" class="pagination"></ul>
+                            </div>
+                        </div>
+                        <!-- /.card-body -->
+                    </div>
+                                    <!-- /.col -->
+                </div>
+                <!-- /.row -->
+            </div>
+            <!-- /.container-fluid -->
+        </section>
+    }
+    else
+    {
+
+        <div class="alert alert-warning col-md-12" role="alert">
+            Sorry! No records exist.
+        </div>
+    }
+</div>
+
+<div class="modal fade" id="actionModal" tabindex="-1" role="dialog">
+    <div class="modal-dialog" role="document">
+    </div>
+</div>
+
+
+<script>
+    $(document).ready(function () {
+
+        var table = $('.my-table');
+        var rows = 10; // Number of rows per page
+        var currentPage = 1;
+
+        var tableBody = $('#example1 tbody');
+        var originalRows = tableBody.find('tr').clone();
+        var dropdownValue = $('#searchdropdown').val();
+
+        var totalRows = table.find('tbody tr').length;
+        var totalPages = Math.ceil(totalRows / rows);
+
+        // Generate "Previous" and "Next" arrow buttons
+        $('#pagination').append('<li class="page-item" data-page="prev"><a class="page-link" href="#"><i class="fa fa-arrow-left"></i></a></li>');
+        $('#pagination').append('<li class="page-item" data-page="next"><a class="page-link" href="#"><i class="fa fa-arrow-right"></i></a></li>');
+
+        showPage(currentPage);
+
+        // Handle arrow button click
+        $('#pagination li').click(function () {
+            var action = $(this).data('page');
+            if (action === "prev" && currentPage > 1) {
+                currentPage--;
+            } else if (action === "next" && currentPage < totalPages) {
+                currentPage++;
+            }
+            showPage(currentPage);
+        });
+
+        function showPage(page) {
+            table.find('tbody tr').hide();
+            var start = (page - 1) * rows;
+            var end = start + rows;
+            table.find('tbody tr').slice(start, end).show();
+        }
+
+        
+
+        $('#searchbar').on('input', function () {
+            var inputValue = $(this).val().trim().toLowerCase();
+            var dropdownValue = $('#searchdropdown').val();
+
+            tableBody.empty();
+
+            originalRows.each(function () {
+                var row = $(this);
+                if (dropdownValue === "Fornitore") {
+                    var fornitoreCell = row.find('td:eq(3)').text().toLowerCase(); // Index 3 corresponds to the "Fornitore" column
+
+                } else if (dropdownValue === "Marca") {
+                    var fornitoreCell = row.find('td:eq(5)').text().toLowerCase(); // Index 3 corresponds to the "Fornitore" column
+
+                } else if (dropdownValue === "Descrizione") {
+                    var fornitoreCell = row.find('td:eq(10)').text().toLowerCase(); // Index 3 corresponds to the "Fornitore" column
+
+                } else if (dropdownValue === "Alias") {
+                    var fornitoreCell = row.find('td:eq(13)').text().toLowerCase(); // Index 3 corresponds to the "Fornitore" column
+
+                } else if (dropdownValue === "Cliente") {
+                    var fornitoreCell = row.find('td:eq(14)').text().toLowerCase(); // Index 3 corresponds to the "Fornitore" column
+
+                } else if (dropdownValue === "Branch") {
+                    var fornitoreCell = row.find('td:eq(15)').text().toLowerCase(); // Index 3 corresponds to the "Fornitore" column
+
+                } else {
+                    var fornitoreCell = row.find('td:eq(19)').text().toLowerCase(); // Index 3 corresponds to the "Fornitore" column
+                }
+
+                if (fornitoreCell.includes(inputValue)) {
+                    tableBody.append(row.clone());
+                }
+            });
+        });
+
+
+        $("#example1").DataTable({
+
+            "responsive": true, "lengthChange": false, "autoWidth": false,
+            "buttons": ["csv", "colvis"]
+        }).buttons().container().appendTo('#example1_wrapper .col-md-6:eq(0)');
+
+    });
+    $(".data-btn").click(function () {
+        $.ajax({
+            url: $(this).attr("data-href"),
+        })
+            .done(function (response) {
+                $("#actionModal .modal-dialog").html(response);
+            });
+    });
+</script>
+
+

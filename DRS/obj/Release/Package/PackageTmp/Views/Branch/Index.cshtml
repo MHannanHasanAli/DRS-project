@@ -1,0 +1,190 @@
+﻿@model DRS.ViewModels.BranchListingViewModel
+
+@{
+}
+<style>
+    .blue {
+        background: #3947e7;
+        color: white;
+    }
+    .addbtn {
+        border-radius: 50%;
+        padding: 10px;
+        background: black;
+        color: white;
+        border: 1px solid black;
+    }
+
+    .container-top {
+        display: flex;
+    }
+
+    .fa-download {
+        color: blue; /* Set the default color to blue */
+        transition: color 0.3s; /* Add a smooth color transition */
+    }
+
+        .fa-download:hover {
+            color: black; /* Change the color to black on hover */
+        }
+
+    .dataTables_filter {
+        float: right;
+    }
+    .top-portion {
+        width: 100%;
+        display: flex;
+        justify-content: space-between;
+    }
+
+    #searchdropdown {
+        margin-left: 30px;
+    }
+</style>
+
+<div class="container">
+    <div class="card">
+        <div class="card-body  container-top">
+           
+            <div class="top-portion">
+                <div class="input-group-prepend flexer">
+                    <span class="input-group-text"><i class="fa fa-search"></i></span>
+                    <input id="searchbar" class="form-control" placeholder="Search">
+                    <select id="searchdropdown">
+                        <option value="Description">Descrizione</option>
+                       
+                    </select>
+                </div>
+                <form>
+
+                    <div class="input-group">
+                        <a href="@Url.Action("Import", "Branch")" class=" btn btn-rounded blue"><i class="fas fa-upload"></i>&nbsp; Import</a>
+
+                        <a href="@Url.Action("ExportToExcel", "Branch")" class=" btn btn-rounded blue"><i class="fas fa-upload"></i>&nbsp; Export</a>
+
+                        @Html.ValidationSummary("", new { @class = "text-danger" })
+                        <a href="@Url.Action("Action", "Branch")" class=" btn btn-rounded blue"><i class="fas fa-plus-circle"></i>&nbsp; Aggiungi</a>
+
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+    @if (Model.Branches != null)
+    {
+        <section class="content">
+            <div class="container-fluid">
+                <div class="row">
+                    
+
+                        <div class="card col-md-12">
+
+                            <!-- /.card-header -->
+                            <div class="card-body">
+                                <table id="example1" class="table table-bordered table-striped">
+                                    <thead>
+                                        <tr>
+                                            <th>Azioni</th>                          
+                                            <th>Description</th>
+                                            <th>Telephone</th>
+                                            <th>Whatsapp</th>
+                                            <th>Email</th>
+                                            <th>Note</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        @foreach (var item in Model.Branches)
+                                        {
+                                            <tr>
+                                                <td>
+                                                    <div class="dropdown">
+                                                        <button class="btn btn-sm btn-rounded btn-secondary btn-icon-text dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                                            <i class="fa fa-list" aria-hidden="true"></i>
+
+                                                        </button>
+                                                        <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                                                            <a class="dropdown-item" href="@Url.Action("Action", "Branch", new { ID = item.ID })">
+                                                                <i class="mdi mdi-pencil"></i> Modifica
+                                                            </a>
+                                                            @*<button data-href="@Url.Action("Delete", "Branch", new { ID = item.ID })" class="dropdown-item data-btn btn btn-danger btn-icon-text" data-toggle="modal" data-target="#actionModal"><i class="mdi mdi-delete"></i>DELETE</button>*@
+
+                                                            <a class="data-btn dropdown-item" data-href="@Url.Action("Delete", "Branch", new { ID = item.ID })" data-toggle="modal" data-target="#actionModal">
+                                                                <i class="mdi mdi-delete"></i> DELETE
+                                                            </a>
+                                                        </div>
+                                                    </div>
+                                                </td>
+                                               
+                                                <td>@item.Description</td>
+                                                <td>@item.Telephone</td>
+                                                <td>@item.Whatsapp</td>
+                                                <td>@item.Email</td>
+                                                <td>@item.Note</td>
+                                              
+                                            </tr>
+                                        }
+                                    </tbody>
+
+                                </table>
+                            </div>
+                            <!-- /.card-body -->
+                        </div>
+                        <!-- /.card -->
+                   
+                    <!-- /.col -->
+                </div>
+                <!-- /.row -->
+            </div>
+            <!-- /.container-fluid -->
+        </section>
+    }
+    else
+    {
+
+        <div class="alert alert-warning col-md-12" role="alert">
+            Sorry! No records exist.
+        </div>
+    }
+</div>
+
+<div class="modal fade" id="actionModal" tabindex="-1" role="dialog">
+    <div class="modal-dialog" role="document">
+    </div>
+</div>
+
+<script>
+    $(document).ready(function () {
+        var tableBody = $('#example1 tbody');
+        var originalRows = tableBody.find('tr').clone();
+        var dropdownValue = $('#searchdropdown').val();
+
+        $('#searchbar').on('input', function () {
+            var inputValue = $(this).val().trim().toLowerCase();
+            var dropdownValue = $('#searchdropdown').val();
+
+            tableBody.empty();
+
+            originalRows.each(function () {
+                var row = $(this);
+                
+                    var fornitoreCell = row.find('td:eq(1)').text().toLowerCase(); // Index 3 corresponds to the "Fornitore" column
+
+              
+
+                if (fornitoreCell.includes(inputValue)) {
+                    tableBody.append(row.clone());
+                }
+            });
+        });
+    })
+    $(".data-btn").click(function () {
+        $.ajax({
+            url: $(this).attr("data-href"),
+        })
+            .done(function (response) {
+                $("#actionModal .modal-dialog").html(response);
+            });
+    });
+</script>
+
+
