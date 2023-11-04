@@ -1,0 +1,127 @@
+﻿﻿@model DRS.ViewModels.BranchActionViewModel
+@{
+    ViewBag.Title = "Action";
+}
+<style>
+    .form-container {
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        margin-top: 50px;
+    }
+
+    .container-bottom {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+
+    .back {
+        margin-right: 10px;
+    }
+
+    .col-md-8 {
+        display: flex;
+        justify-content: space-between;
+    }
+
+    input {
+        width: 400px;
+    }
+
+    .setter {
+        position: relative;
+        left: -130px;
+    }
+</style>
+@if (Model != null)
+{
+    <div class="card">
+        <div class="card-body">
+           
+            <div class="container">
+                <form id="actionForm">
+                    <div class="form-container">
+                        <input value="@Model.ID" type="hidden" class="form-control" name="ID" id="ID" />
+                        <div class="row">
+
+                            <div class="form-group col-md-4">
+                                <label for="Description">Description&nbsp;</label>
+                                <input value="@Model.Description" type="text" class="form-control" name="Description" id="Description" />
+                            </div>
+
+                            <div class="form-group col-md-4">
+                                <label for="Email">Email  &nbsp;</label>
+                                <input value="@Model.Email" type="text" class="form-control" name="Email" id="Email" />
+                            </div>
+                            <div class="form-group col-md-4">
+                                <label for="Telephone">Telephone&nbsp;</label>
+                                <input value="@Model.Telephone" type="text" class="form-control" name="Telephone" id="Telephone" />
+                            </div>
+
+                        </div>
+                        <div class="row setter">
+                           
+                            <div class="form-group col-md-4">
+                                <label for="Whatsapp">Whatsapp &nbsp;</label>
+                                <input value="@Model.Whatsapp" type="text" class="form-control" name="Whatsapp" id="Whatsapp" />
+                            </div>
+                            <div class="form-group col-md-6">
+                                <label for="Note">Note &nbsp;</label>
+                                <input value="@Model.Note" type="text" class="form-control" name="Note" id="Note" />
+                            </div>
+
+                        </div>
+                    </div>
+
+                </form>
+
+
+
+                <div class="errorDiv">
+
+                </div>
+            </div>
+            <div style="background-color:white;" class="card-footer container-bottom">
+                <a href="@Url.Action("Index","Branch")" class="btn btn-danger back btn-rounded"><i class="fas fa-times mr-1"></i> Cancel</a>
+                @if (Model.ID != 0)
+                {
+                    <button id="actionButton" type="button" class="btn btn-success btn-rounded"><i class="fas fa-save mr-1"></i> Update</button>
+                }
+                else
+                {
+                    <button id="actionButton" type="button" class="btn btn-success btn-rounded"><i class="fas fa-save mr-1"></i> Save</button>
+                }
+
+            </div>
+
+        </div>
+    </div>
+}
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+<script>
+
+    $("#actionButton").click(function () {
+        $("#actionButton").attr("disabled", "disabled");
+        showLoadingSpinner();
+
+		$.ajax({
+			url: '@Url.Action("Action", "Branch")',
+			type: "post",
+			data: $("#actionForm").serialize()
+		})
+            .done(function (response) {
+			if(response.success)
+			{
+				window.location.href = "@Url.Action("Index", "Branch")";
+			}
+			else {
+				$(".errorDiv").html(response.Message);
+			}
+		});
+    });
+
+  
+</script>

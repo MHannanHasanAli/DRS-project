@@ -1,0 +1,100 @@
+﻿@model DRS.ViewModels.UsersListingViewModel
+
+<style>
+    #top-portion{
+        display: flex;
+        width:100%;
+        justify-content: space-between;
+    }
+    .blue {
+        background: #3947e7;
+        color: white;
+    }
+</style>
+<div class="row mb-3">
+    <div class="col col-lg-12">
+       
+        <div class="input-group" id="top-portion">
+            @*<input type="text" name="searchterm" class="form-control" placeholder="Search." value="@Model.SearchTerm">
+        @Html.ValidationSummary("", new { @class = "text-danger" })*@
+            <div class="input-group-prepend flexer">
+                <span class="input-group-text"><i class="fa fa-search"></i></span>
+                <input id="searchbar" class="form-control" placeholder="Search">
+                <select id="searchdropdown">
+                    <option value="Name">Nome</option>
+                    <option value="Surname">Cognome</option>
+                    <option value="Branch">Filiale</option>
+                    <option value="Profile">Profile</option>
+
+                </select>
+            </div>
+            <form>
+                <div class="input-group">
+                    <a href="@Url.Action("Import", "User")" class=" btn btn-rounded blue"><i class="fas fa-upload"></i>&nbsp; Import</a>
+
+                    <a href="@Url.Action("ExportToExcel", "User")" class=" btn btn-rounded blue"><i class="fas fa-upload"></i>&nbsp; Export</a>
+
+                    <button data-href="@Url.Action("Register", "User")" class="data-btn btn btn-rounded btn-primary" type="button" data-toggle="modal" data-target="#actionModal"><i class="fas fa-user-plus"></i>&nbsp; Aggiungi</button>
+                </div>
+            </form>
+        </div>
+       
+    </div>
+</div>
+
+<div class="row">
+    <div class="col col-lg-12">
+        @{
+            Html.RenderPartial("_Listing", Model);
+        }
+    </div>
+</div>
+
+<div class="modal fade" id="actionModal" tabindex="-1" role="dialog">
+    <div class="modal-dialog" role="document">
+    </div>
+</div>
+
+<script>
+    $(document).ready(function () {
+        var tableBody = $('tbody');
+        var originalRows = tableBody.find('tr').clone();
+        var dropdownValue = $('#searchdropdown').val();
+
+        $('#searchbar').on('input', function () {
+            var inputValue = $(this).val().trim().toLowerCase();
+            var dropdownValue = $('#searchdropdown').val();
+
+            tableBody.empty();
+
+            originalRows.each(function () {
+                var row = $(this);
+                if (dropdownValue === "Name") {
+                    var fornitoreCell = row.find('td:eq(2)').text().toLowerCase(); // Index 3 corresponds to the "Fornitore" column
+
+                } else if(dropdownValue === "Surname") {
+                    var fornitoreCell = row.find('td:eq(3)').text().toLowerCase(); // Index 3 corresponds to the "Fornitore" column
+
+                } else if (dropdownValue === "Branch") {
+                    var fornitoreCell = row.find('td:eq(4)').text().toLowerCase(); // Index 3 corresponds to the "Fornitore" column
+
+                }else {
+                    var fornitoreCell = row.find('td:eq(5)').text().toLowerCase(); // Index 3 corresponds to the "Fornitore" column
+
+                }
+
+                if (fornitoreCell.includes(inputValue)) {
+                    tableBody.append(row.clone());
+                }
+            });
+        });
+    })
+    $(".data-btn").click(function () {
+        $.ajax({
+            url: $(this).attr("data-href"),
+        })
+            .done(function (response) {
+                $("#actionModal .modal-dialog").html(response);
+            });
+    });
+</script>

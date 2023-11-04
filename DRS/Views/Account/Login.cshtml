@@ -1,0 +1,80 @@
+﻿@using DRS.Models
+@model LoginViewModel
+@{
+    ViewBag.Title = "Log in";
+    Layout = null;
+}
+<head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <title>DRS</title>
+    <!-- base:css -->
+    <link rel="stylesheet" href="~/Content/template/vendors/typicons/typicons.css">
+    <link rel="stylesheet" href="~/Content/template/vendors/css/vendor.bundle.base.css">
+    <!-- endinject -->
+    <!-- plugin css for this page -->
+    <!-- End plugin css for this page -->
+    <!-- inject:css -->
+    <link rel="stylesheet" href="~/Content/template/css/vertical-layout-light/style.css">
+    <!-- endinject -->
+    <link rel="shortcut icon" href="~/Content/template/images/g-icon-15.jpg" />
+</head>
+<style>
+
+    .auth .brand-logo img {
+        width: 300px;
+    }
+    
+</style>
+
+<div class="container-scroller">
+    <div class="container-fluid page-body-wrapper full-page-wrapper">
+        <div class="content-wrapper d-flex align-items-center auth px-0">
+            <div class="row w-100 mx-0">
+
+                <div class="col-lg-4 mx-auto">
+                    <div  style=" background-color: dodgerblue; color: white; " class="auth-form-light text-left py-5 px-4 px-sm-5">
+                        <div style="width:300px;margin-inline:auto;" class="brand-logo">
+                            <img src="~/Content/Logo/logo_min.png" />
+                        </div>
+                        <h4>Hello! let's get started</h4>
+                        <h6 class="font-weight-light">Sign in to continue.</h6>
+                        <section id="loginForm">
+                            @using (Html.BeginForm("Login", "Account", new { ReturnUrl = ViewBag.ReturnUrl }, FormMethod.Post, new { @class = "form-horizontal", role = "form" }))
+                            {
+                                @Html.AntiForgeryToken()
+                                <div class="form-group">
+                                    <input type="text" class="form-control form-control-lg" id="exampleInputEmail1" name="name" placeholder="Username">
+                                </div>
+                                <div class="form-group">
+                                    <input type="password" class="form-control form-control-lg" id="exampleInputPassword1" name="password" placeholder="Password">
+                                </div>
+                                <div class="mt-3">
+                                    <button type="submit" class="btn btn-block btn-primary btn-lg font-weight-medium auth-form-btn">SIGN IN</button>
+                                </div>
+
+
+
+                            }
+                        </section>
+                        @*<a  href="@Url.Action("Register","Account")" class="btn btn-primary"> Register</a>*@
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- content-wrapper ends -->
+    </div>
+    <!-- page-body-wrapper ends -->
+</div>
+
+
+
+<script src="~/Content/template/vendors/js/vendor.bundle.base.js"></script>
+<!-- endinject -->
+<!-- inject:js -->
+<script src="~/Content/template/js/off-canvas.js"></script>
+<script src="~/Content/template/js/hoverable-collapse.js"></script>
+<script src="~/Content/template/js/template.js"></script>
+<script src="~/Content/template/js/settings.js"></script>
+<script src="~/Content/template/js/todolist.js"></script>

@@ -1,0 +1,39 @@
+﻿@model DRS.ViewModels.AdminViewModel
+
+@{
+    ViewBag.Title = "UserProfile";
+}
+
+
+<div class="container rounded bg-white mt-5 mb-5">
+    <div class="row">
+        <div class="col-md-3 border-right">
+            <div class="d-flex flex-column align-items-center text-center p-3 py-5"><img class="rounded-circle mt-5" width="150px" src="https://st3.depositphotos.com/15648834/17930/v/600/depositphotos_179308454-stock-illustration-unknown-person-silhouette-glasses-profile.jpg"><span class="font-weight-bold">@Model.Name</span></div>
+        </div>
+        <div class="col-md-5 border-right">
+            <div class="p-3 py-5">
+                <div class="d-flex justify-content-between align-items-center mb-3">
+                    <h4 class="text-right">Profile Settings</h4>
+                </div>
+                @using (Html.BeginForm("UserProfile", "Account", FormMethod.Post))
+                {
+                <div class="row mt-2">
+                    <input type="hidden" class="form-control" name="ID" placeholder="Full Name" value="@Model.ID">
+                    <div class="col-md-6"><label class="labels">Full Name</label><input type="text" name="Name" class="form-control" placeholder="Full Name" value="@Model.Name"></div>
+                </div>
+                <div class="row mt-3">
+                    <div class="col-md-12"><label class="labels">Contact</label><input type="text" name="Contact" class="form-control" placeholder="enter phone number" value="@Model.Contact"></div>
+                    <div class="col-md-12"><label class="labels">Email</label><input type="email" name="Email" class="form-control" placeholder="Enter Email" value="@Model.Email"></div>
+                    <div class="col-md-12"><label class="labels">UserName</label><input type="text" name="UserName" class="form-control" placeholder="Enter UserName" value="@Model.UserName"></div>
+
+                </div>
+                <div class="row mt-3">
+                    <div class="col-md-6"><label class="labels">Password</label><input name="Password" type="password" class="form-control" placeholder="Password" value="@Model.Password"></div>
+                </div>
+                <div class="mt-5 text-center"><button class="btn btn-primary profile-button" type="submit">Update Profile</button></div>
+                }
+            </div>
+        </div>
+        
+    </div>
+</div>

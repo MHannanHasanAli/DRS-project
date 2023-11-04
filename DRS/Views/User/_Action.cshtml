@@ -1,0 +1,142 @@
+﻿@model DRS.ViewModels.UserActionModel
+
+@if (Model != null)
+{
+    <div class="modal-content">
+        <div class="modal-header">
+            <h5 class="modal-title">
+                @if (!string.IsNullOrEmpty(Model.ID))
+                {
+                    <span>Edit User</span>
+                }
+                else
+                {
+                    <span>Create User</span>
+                }
+            </h5>
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+            </button>
+        </div>
+        <div class="modal-body">
+            <form id="actionForm">
+                <input type="hidden" name="ID" value="@Model.ID" />
+                <div class="form-group">
+                    <input class="form-control" value="@Model.Image" name="Image" id="_Photo" type="hidden" />
+                    <input class="form-control" id="PhotoUpload" name="PhotoUpload" type="file" accept=".png, .jpg, .jpeg" />
+
+                    <div class="thumb">
+                        <img style="height:100px; width:100px" class="img-thumbnail img-fluid" id="PhotoImg" src="@Model.Image"/>
+                    </div>
+                </div>
+                    <div class="form-group">
+                        <label>Full Nome</label>
+                        <input class="form-control" name="Name" placeholder="Enter Full Name." value="@Model.Name">
+                    </div>
+                    <div class="form-group">
+                        <label>Cognome</label>
+                        <input class="form-control" name="Surname" placeholder="Enter Surname" value="@Model.Surname">
+                    </div>
+
+                    <div class="form-group row">
+                        <label class="col-sm-3 col-form-label">Role</label>
+                        <div class="col-sm-9">
+                            <select name="Role" class="form-control">
+                                @foreach (var item in Model.Roles)
+                                {
+                                    if (item.Name == Model.Role)
+                                    {
+                                        <option value="@item.Name" selected>@item.Name</option>
+                                    }
+                                    else
+                                    {
+                                        <option value="@item.Name">@item.Name</option>
+                                    }
+                                }
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label>Filiale</label>
+                        <input class="form-control" name="Branch" placeholder="Enter Branch" value="@Model.Branch">
+                    </div>
+
+                    <div class="form-group">
+                        <label>Password</label>
+                        <input class="form-control" name="Password" type="password" placeholder="Enter Password." value="@Model.Password">
+                    </div>
+
+
+            </form>
+
+            <div class="errorDiv">
+
+            </div>
+        </div>
+        <div class="modal-footer">
+            @if (!string.IsNullOrEmpty(Model.ID))
+            {
+                <button id="actionButton" type="button" class="btn btn-primary"><i class="fas fa-save mr-1"></i> Update</button>
+            }
+            else
+            {
+                <button id="actionButton" type="button" class="btn btn-primary"><i class="fas fa-save mr-1"></i> Save</button>
+            }
+            <button type="button" class="btn btn-secondary" data-dismiss="modal"><i class="fas fa-times mr-1"></i> Close</button>
+        </div>
+    </div>
+}
+
+<script>
+         $("#PhotoUpload").change(function () {
+        var element = this;
+        var formData = new FormData();
+
+        var totalFiles = element.files.length;
+
+        for (var i = 0; i < totalFiles; i++) {
+            var file = element.files[i];
+            formData.append("Photo", file);
+        }
+
+        $.ajax({
+            type: 'POST',
+            url: '@Url.Action("UploadPhotos", "Shared")',
+            data: formData,
+            dataType: 'json',
+            contentType: false,
+            processData: false
+        })
+            .done(function (response) {
+
+                console.log(response);
+                if (response.Success) {
+                    $("#_Photo").val(response.DocURL);
+                    $("#PhotoImg").attr("src", response.DocURL);
+
+                }
+
+            })
+            .fail(function (XMLHttpRequest, textStatus, errorThrown) {
+                alert("FAIL");
+            })
+    });
+
+	$("#actionButton").click(function () {
+		$.ajax({
+			url: '@Url.Action("Action", "User")',
+			type: "post",
+			data: $("#actionForm").serialize()
+		})
+		.done(function (response) {
+			if(response.Success)
+			{
+				location.reload();
+			}
+			else {
+				$(".errorDiv").html(response.Message);
+			}
+		});
+	});
+</script>

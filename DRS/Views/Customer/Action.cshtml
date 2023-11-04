@@ -1,0 +1,191 @@
+﻿﻿@model DRS.ViewModels.CustomerActionViewModel
+@{
+    ViewBag.Title = "Action";
+}
+<style>
+    .form-container {
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        margin-top: 50px;
+    }
+
+    .container-bottom {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+
+    .back {
+        margin-right: 10px;
+    }
+
+    .col-md-8 {
+        display: flex;
+        justify-content: space-between;
+    }
+
+    input {
+        width: 400px;
+    }
+
+    .setter {
+        position: relative;
+        left: -139px;
+    }
+    .setter2 {
+        position: relative;
+        left: -385px;
+    }
+</style>
+@if (Model != null)
+{
+    <div class="card">
+        <div class="card-body">
+            @if (Model.ID != 0)
+            {
+                
+            }
+            else
+            {
+                
+
+            }
+            <div class="container">
+                <form id="actionForm">
+                    <div class="form-container">
+                        <input value="@Model.ID" type="hidden" class="form-control" name="ID" id="ID" />
+                        <div class="row">
+                            <div class="form-group col-md-3">
+                                <label>Product Image</label>
+
+                                <input class="form-control" value="@Model.Logo" name="Logo" id="_Photo" type="hidden" />
+                                <input class="form-control" id="PhotoUpload" name="PhotoUpload" type="file" accept=".png, .jpg, .jpeg" />
+
+                                <div class="thumb">
+                                    <img style="height:100px; width:100px" class="img-thumbnail img-fluid" id="PhotoImg" src="@Model.Logo" />
+                                </div>
+                            </div>
+                            <div class="form-group col-md-3">
+                                <label for="Description">Description&nbsp;</label>
+                                <input value="@Model.Description" type="text" class="form-control" name="Description" id="Description" />
+                            </div>
+                            <div class="form-group col-md-3">
+                                <label for="Alias">Alias &nbsp;</label>
+                                <input value="@Model.Alias" type="text" class="form-control" name="Alias" id="Alias" />
+                            </div>
+                            <div class="form-group col-md-3">
+                                <label for="Email">Email  &nbsp;</label>
+                                <input value="@Model.Email" type="text" class="form-control" name="Email" id="Email" />
+                            </div>
+
+
+                        </div>
+                        <div class="row setter">
+                            <div class="form-group col-md-4">
+                                <label for="Telephone">Telefono&nbsp;</label>
+                                <input value="@Model.Telephone" type="text" class="form-control" name="Telephone" id="Telephone" />
+                            </div>
+                            <div class="form-group col-md-4">
+                                <label for="Whatsapp">Whatsapp &nbsp;</label>
+                                <input value="@Model.Whatsapp" type="text" class="form-control" name="Whatsapp" id="Whatsapp" />
+                            </div>
+                            <div class="form-group col-md-4">
+                                <label for="Erp">Erp &nbsp;</label>
+                                <input value="@Model.Erp" type="text" class="form-control" name="Erp" id="Erps" />
+                            </div>
+
+                        </div>
+                        <div class="row setter2">
+                          
+                            <div class="form-group col-md-12">
+                                <label for="Note">Note &nbsp;</label>
+                                <input value="@Model.Note" type="text" class="form-control" name="Note" id="Note" />
+                            </div>
+
+                        </div>
+                    </div>
+
+                </form>
+
+
+
+                <div class="errorDiv">
+
+                </div>
+            </div>
+            <div style="background-color:white;" class="card-footer container-bottom">
+                <a href="@Url.Action("Index","Customer")" class="btn btn-danger back btn-rounded"><i class="fas fa-times mr-1"></i> Cancel</a>
+                @if (Model.ID != 0)
+                {
+                    <button id="actionButton" type="button" class="btn btn-success btn-rounded"><i class="fas fa-save mr-1"></i> Update</button>
+                }
+                else
+                {
+                    <button id="actionButton" type="button" class="btn btn-success btn-rounded"><i class="fas fa-save mr-1"></i> Save</button>
+                }
+
+            </div>
+
+        </div>
+    </div>
+}
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+<script>
+
+    $("#actionButton").click(function () {
+        $("#actionButton").attr("disabled", "disabled");
+        showLoadingSpinner();
+
+		$.ajax({
+			url: '@Url.Action("Action", "Customer")',
+			type: "post",
+			data: $("#actionForm").serialize()
+		})
+            .done(function (response) {
+			if(response.success)
+			{
+				window.location.href = "@Url.Action("Index", "Customer")";
+			}
+			else {
+				$(".errorDiv").html(response.Message);
+			}
+		});
+    });
+
+   $("#PhotoUpload").change(function () {
+        var element = this;
+        var formData = new FormData();
+
+        var totalFiles = element.files.length;
+
+        for (var i = 0; i < totalFiles; i++) {
+            var file = element.files[i];
+            formData.append("Photo", file);
+        }
+
+        $.ajax({
+            type: 'POST',
+            url: '@Url.Action("UploadPhotos", "Shared")',
+            data: formData,
+            dataType: 'json',
+            contentType: false,
+            processData: false
+        })
+            .done(function (response) {
+
+                console.log(response);
+                if (response.Success) {
+                    $("#_Photo").val(response.DocURL);
+                    $("#PhotoImg").attr("src", response.DocURL);
+
+                }
+
+            })
+            .fail(function (XMLHttpRequest, textStatus, errorThrown) {
+                alert("FAIL");
+            })
+    });
+</script>

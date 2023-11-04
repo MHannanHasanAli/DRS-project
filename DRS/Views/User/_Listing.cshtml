@@ -1,0 +1,103 @@
+﻿@model DRS.ViewModels.UsersListingViewModel
+@{
+    ViewBag.Title = "Index";
+}
+<div class="row">
+
+    <div class="col-lg-12 grid-margin stretch-card">
+        @if (Model.Users != null)
+        {
+            <div class="card">
+
+                <div class="table-responsive">
+                    <table class="table table-striped table-hover">
+                        <thead>
+                            <tr>
+
+                                <th>
+                                    Image
+                                </th>
+                                @*<th>
+                                    ID
+                                </th>*@
+                                <th>
+                                    Nome
+                                </th>
+
+                                <th>
+                                    Cognome
+                                </th>
+                                <th>
+                                    Filiale
+                                </th>
+                                <th>
+                                    Profile
+                                </th>
+
+                                <th>
+                                    Password
+                                </th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var item in Model.Users)
+                            {
+                                <tr>
+                                    <td>
+                                        @if (item.Image != null)
+                                        {
+                                            <img style="height:50px; width:50px;" src="@item.Image" />
+
+                                        }
+                                        else
+                                        {
+                                            <img style="height:50px; width:50px;" src="~/Content/DRS Content/Images/download.png" />
+
+                                        }
+                                    </td>
+                                    @*<td>@item.Id</td>*@
+                                    <td>@item.Name</td>
+                                    <td>@item.Surname</td>
+                                    <td>@item.Branch</td>
+                                    <td>@item.Role</td>
+                                    <td>
+                                    @if (item.Password != null)
+                                    {
+                                        <h4>********</h4>
+                                    }
+                                    </td>
+                                    <td>
+                                        <button data-href="@Url.Action("Action", "User", new { ID = item.Id })" type="button" class="data-btn btn btn-sm btn-info btn-icon-text btn-rounded" data-toggle="modal" data-target="#actionModal"><i class="mdi mdi-pencil"></i> EDIT</button>
+                                        <button data-href="@Url.Action("Delete", "User", new { ID = item.Id })" type="button" class="data-btn btn btn-sm btn-danger btn-icon-text btn-rounded" data-toggle="modal" data-target="#actionModal"><i class="mdi mdi-delete"></i>DELETE</button>
+                                        <button data-href="@Url.Action("UserRoles", "User", new { ID = item.Id })" type="button" class="data-btn btn btn-sm btn-success btn-icon-text btn-rounded" data-toggle="modal" data-target="#actionModal"><i class="mdi mdi-account-details"></i>ROLES</button>
+
+                                    </td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        }
+        else
+        {
+
+            <div class="alert alert-warning col-md-12" role="alert">
+                Sorry! No records exist.
+            </div>
+        }
+    </div>
+</div>
+<script>
+    $(".data-btn").click(function () {
+        $.ajax({
+            url: $(this).attr("data-href"),
+        })
+            .done(function (response) {
+                $("#actionModal .modal-dialog").html(response);
+            });
+        });
+</script>
+
+
+

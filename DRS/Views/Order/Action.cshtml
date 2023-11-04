@@ -1,0 +1,745 @@
+﻿﻿@model DRS.ViewModels.OrderActionViewModel
+@{
+    ViewBag.Title = "Action";
+}
+<style>
+    .form-container {
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        margin-top: 50px;
+    }
+
+    .container-bottom {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+
+    .back {
+        margin-right: 10px;
+    }
+
+    .col-md-8 {
+        display: flex;
+        justify-content: space-between;
+    }
+
+    input {
+        width: 400px;
+    }
+
+    .setter {
+        position: relative;
+        left: -108px;
+    }
+
+    .input-sm-custom {
+        width: 80px; /* Adjust the width as needed */
+    }
+
+    #modal-text {
+        display: flex;
+        justify-content: space-between;
+    }
+
+    #headingAtTable {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+
+        #headingAtTable h4 {
+            margin-top: -8px;
+            margin-bottom: -8px;
+        }
+</style>
+@if (Model != null)
+{
+    <div class="card">
+        <div class="card-body">
+            @if (Model.ID != 0)
+            {
+
+
+            }
+            else
+            {
+
+
+            }
+            <div class="container">
+                <form id="actionForm">
+                    <input value="@Model.ID" type="hidden" class="form-control" name="ID" id="ID" />
+                    <div class="row">
+                        <div class="col-md-3">
+                            <div class="form-group">
+                                <label for="IDBranch">Branch:</label>
+                                <select class="form-control" name="IDBranch" id="IDBranch">
+                                    @foreach (var item in Model.Branches)
+                                    {
+                                        if (item.ID == Model.IDBranch)
+                                        {
+                                            <option selected value="@item.ID">@item.Description</option>
+                                        }
+                                        else
+                                        {
+                                            <option value="@item.ID">@item.Description</option>
+
+                                        }
+                                    }
+                                </select>
+                            </div>
+                        </div>
+                        <div class="col-md-3">
+                            <div class="form-group">
+                                <label for="IDCustomer">Customer:</label>
+                                <select class="form-control" name="IDCustomer" id="IDCustomer">
+                                    @foreach (var item in Model.Customers)
+                                    {
+                                        if (item.ID == Model.IDCustomer)
+                                        {
+                                            <option selected value="@item.ID">@item.Description</option>
+                                        }
+                                        else
+                                        {
+                                            <option value="@item.ID">@item.Description</option>
+
+                                        }
+                                    }
+                                </select>
+                            </div>
+                        </div>
+                        <div class="col-md-3">
+                            <div class="form-group">
+                                <label for="IDBrand">Brand:</label>
+                                <select class="form-control" name="IDBrand" id="IDBrand">
+                                    @foreach (var item in Model.Brands)
+                                    {
+                                        if (item.ID == Model.IDBrand)
+                                        {
+                                            <option selected value="@item.ID">@item.Description</option>
+                                        }
+                                        else
+                                        {
+                                            <option value="@item.ID">@item.Description</option>
+
+                                        }
+                                    }
+                                </select>
+                            </div>
+                        </div>
+
+                        <div class="col-md-3">
+                            <div class="form-group">
+                                <label for="IDSupplier">Supplier:</label>
+                                <select class="form-control" name="IDSupplier" id="IDSupplier">
+                                </select>
+                            </div>
+                        </div>
+                        <div class="form-group col-md-3">
+                            <label for="Plate">Targa &nbsp;</label>
+                            <input value="@Model.Plate" type="text" class="form-control" name="Plate" id="Plate" oninput="convertToUppercase(this)" />
+                        </div>
+                        <div class="form-group col-md-3">
+                            <label for="Chassis">Telaio  &nbsp;</label>
+                            <input value="@Model.Chassis" type="text" class="form-control" name="Chassis" id="Chassis" oninput="convertToUppercase(this)" />
+                        </div>
+                        <div class="form-group col-md-6">
+                            <label for="Note">Note&nbsp;</label>
+                            <input value="@Model.Note" type="text" class="form-control" name="Note" id="Note" />
+                        </div>
+                        @if (Model.ID != 0)
+                        {<hr />
+                            <br />
+                            <div class="form-group col-md-6">
+                                <label for="AlternativeCode">Codice Alternativo&nbsp;</label>
+                                <input value="@Model.AlternativeCode" type="text" class="form-control" name="Note" id="Note" />
+                            </div>
+                            <div class="form-group col-md-3">
+                                <label for="DeliveryDate">Data Consegna Prevists&nbsp;</label>
+                                @if (Model.DeliveryDate != null)
+                                {
+                                    @Html.TextBox("DeliveryDate", Model.DeliveryDate, "{0:yyyy-MM-dd}", new { @style = "width:100%", @id = "DeliveryDate", @class = "form-control", type = "date" })
+                                }
+                                else
+                                {
+                                    @Html.TextBox("DeliveryDate", Model.DeliveryDate, "{0:yyyy-MM-dd}", new { @style = "width:100%", @id = "DeliveryDate", @class = "form-control", type = "date" })
+                                }
+                            </div>
+                            <div class="form-group col-md-3">
+                                <label for="Reminder1">Sol 1 &nbsp;</label>
+                                @if (Model.Reminder1 != null)
+                                {@Html.TextBox("Reminder1", Model.Reminder1, "{0:yyyy-MM-dd}", new { @style = "width:100%", @id = "Reminder1", @class = "form-control", type = "date" })
+                            }
+                            else
+                            {
+                                @Html.TextBox("Reminder1", Model.Reminder1, "{0:yyyy-MM-dd}", new { @style = "width:100%", @id = "Reminder1", @class = "form-control", type = "date" })
+                                @*<input value="@Model._Date" type="date" class="form-control" name="_Date" id="_Date" placeholder="Enter cost" />*@
+                            }
+                                @*<input value="@Model._ShipByDate" type="date" class="form-control" name="_ShipByDate" id="_ShipByDate" />*@
+                            </div>
+                            <div class="form-group col-md-3">
+                                <label for="Reminder2">Sol 2 &nbsp;</label>
+                                @if (Model.Reminder2 != null)
+                                {@Html.TextBox("Reminder2", Model.Reminder2, "{0:yyyy-MM-dd}", new { @style = "width:100%", @id = "Reminder2", @class = "form-control", type = "date" })
+                            }
+                            else
+                            {
+                                @Html.TextBox("Reminder2", Model.Reminder2, "{0:yyyy-MM-dd}", new { @style = "width:100%", @id = "Reminder2", @class = "form-control", type = "date" })
+                                @*<input value="@Model._Date" type="date" class="form-control" name="_Date" id="_Date" placeholder="Enter cost" />*@
+                            }
+                                @*<input value="@Model._ShipByDate" type="date" class="form-control" name="_ShipByDate" id="_ShipByDate" />*@
+                            </div>
+                            <div class="form-group col-md-3">
+                                <label for="Reminder3">Sol 3 &nbsp;</label>
+                                @if (Model.Reminder3 != null)
+                                {@Html.TextBox("Reminder3", Model.Reminder3, "{0:yyyy-MM-dd}", new { @style = "width:100%", @id = "Reminder3", @class = "form-control", type = "date" })
+                            }
+                            else
+                            {
+                                @Html.TextBox("Reminder3", Model.Reminder3, "{0:yyyy-MM-dd}", new { @style = "width:100%", @id = "Reminder3", @class = "form-control", type = "date" })
+                                @*<input value="@Model._Date" type="date" class="form-control" name="_Date" id="_Date" placeholder="Enter cost" />*@
+                            }
+                            </div>
+                            if (@Model.Received == "on")
+                            {
+                                <div class="form-group col-md-3">
+                                    <label for="Received">Ricevuto&nbsp;</label>
+                                    <input type="checkbox" class="form-control" name="Received" id="Received" checked />
+                                </div>
+                            }
+                            else
+                            {
+                                <div class="form-group col-md-3">
+                                    <label for="Received">Ricevuto&nbsp;</label>
+                                    <input type="checkbox" class="form-control" name="Received" id="Received" />
+                                </div>
+                            }
+
+                            if (Model.ID != 0)
+                            {
+                                <div class="form-group col-md-3">
+                                    <label>Allegato</label>
+
+                                    <input class="form-control" value="@Model.Photo" name="Photo" id="Photo" type="hidden" />
+                                    <input class="form-control" id="PhotoUpload" name="PhotoUpload" type="file" accept=".png, .jpg, .jpeg" />
+
+                                    <div class="thumb">
+                                        <img style="height:100px; width:100px" class="img-thumbnail img-fluid" id="PhotoImg" src="@Model.Photo" />
+                                    </div>
+                                </div>
+
+                            }
+
+                            @*if (@Model.Attachment == "on")
+                                {
+                                    <div class="form-group col-md-3">
+                                        <label for="Attachment">Allegato&nbsp;</label>
+                                        <input type="checkbox" class="form-control" name="Attachment" id="Attachment" checked />
+                                    </div>
+                                }
+                                else
+                                {
+                                    <div class="form-group col-md-3">
+                                        <label for="Attachment">Allegato&nbsp;</label>
+                                        <input type="checkbox" class="form-control" name="Attachment" id="Attachment" />
+                                    </div>
+                                }*@
+
+                        }
+
+
+
+                    </div>
+                    <hr />
+                    <div id="headingAtTable">
+                        <h4>Items</h4>
+                    </div>
+                    <hr />
+                    <div class="row">
+                        <div class="col-md-12 table-responsive">
+                            <table class="table" id="ProductsTable">
+                                <thead>
+                                    <tr>
+                                        @if (Model.ID != 0)
+                                        {
+
+                                            <th>
+                                                Order Code
+                                            </th>
+                                            <th>
+                                                Quantita
+                                            </th>
+                                            <th>
+                                                Description
+                                            </th>
+                                            <th>Note</th>
+
+                                        }
+                                        else
+                                        {
+                                            <th>
+                                                S.No
+                                            </th>
+
+                                            <th>
+                                                Order Code
+                                            </th>
+                                            <th>
+                                                Quantita
+                                            </th>
+                                            <th>
+                                                Description
+                                            </th>
+                                            <th>Note</th>
+                                        }
+
+
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @if (Model.ID != 0)
+                                    {
+                                        <tr>
+                                            <td id="codeupdate">@Model.ItemCode</td>
+                                            <td id="quantityupdate">@Model.Quantity</td>
+                                            <td id="descriptionupdate">@Model.Description</td>
+                                            <td>@Model.NoteItem</td>
+                                        </tr>
+                                    }
+                                </tbody>
+                            </table>
+                            <hr />
+
+                        </div>
+                    </div>
+
+                </form>
+                @if (Model.ID != 0)
+                {
+                }
+                else
+                {
+                    <button id="AddItemButton" type="button" class="btn btn-primary" style="margin-bottom: 10px;">Add Item</button><br />
+                }
+
+
+                <div class="errorDiv">
+
+                </div>
+            </div>
+            <div style="background-color:white;" class="card-footer container-bottom">
+                <a href="@Url.Action("Index","Order")" class="btn btn-danger back btn-rounded"><i class="fas fa-times mr-1"></i> Cancel</a>
+                @if (Model.ID != 0)
+                {
+                    <button id="actionButton" type="button" class="btn btn-success btn-rounded"><i class="fas fa-save mr-1"></i> Update</button>
+                }
+                else
+                {
+                    <button id="actionButton" type="button" class="btn btn-success btn-rounded"><i class="fas fa-save mr-1"></i> Continua</button>
+                }
+
+            </div>
+
+        </div>
+    </div>
+}
+<!-- Modal HTML -->
+<div class="modal fade" id="confirmationModal" tabindex="-1" role="dialog" aria-labelledby="confirmationModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="confirmationModalLabel">CIAO</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body" id="receipt">
+                <h5 id="selectedBrandName"></h5>
+                <hr />
+                <div id="modal-text">
+                    <h5 id="selectedTarga"></h5>
+                    <h5 id="selectedTelaio"></h5>
+                </div>
+                <hr />
+                <hr />
+                <div id="headingAtTable">
+                    <h4>CODICI</h4>
+                </div>
+                <hr />
+                <table class="table table-borderless">
+                    <thead>
+                        <tr>
+                            <th>Codice</th>
+                            <th>Descrizione</th>
+                            <th>Qnt</th>
+
+                        </tr>
+                    </thead>
+                    <tbody id="selectedRowsTableBody">
+                    </tbody>
+                </table>
+                <hr />
+
+
+                <br />
+
+                <h5 id="selectedBranch"></h5>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+                <button type="button" class="btn btn-success" data-dismiss="modal" id="copiabutton">Copia</button>
+                <button type="button" class="btn btn-primary" id="confirmSaveButton">Conferma Ordine</button>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="modal fade" id="supplierInfoModal" tabindex="-1" role="dialog" aria-labelledby="supplierInfoModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="supplierInfoModalLabel">Supplier Information</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body" id="supplierInfoContent">
+                <!-- Supplier information will be displayed here -->
+            </div>
+            <div class="modal-footer">
+                <a class="btn btn-secondary" href="@Url.Action("Index", "Order")">
+                    <i class="mdi mdi-multiplication"></i> Close
+                </a>
+            </div>
+        </div>
+    </div>
+</div>
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/1.3.4/jspdf.min.js"></script>
+<script src="https://html2canvas.hertzen.com/dist/html2canvas.min.js"></script>
+
+<script>
+    $(document).ready(function () {
+
+        var selectedSupplierID = '@Model.IDSupplier'; // Convert the Model.IDSupplier to a string
+        var editoption = '@Model.ID';
+if (selectedSupplierID !== 'null') {
+    $('#IDSupplier').val(selectedSupplierID);
+}
+        var selectedBrandID = $('#IDBrand').val(); // Get the selected Brand ID
+        if (selectedBrandID !== "") {
+            // Make an AJAX request to the server to fetch suppliers by brand
+            $.ajax({
+                url: '/Order/GetSuppliersByBrand', // Replace with the actual URL to your controller action
+                type: 'POST', // or 'GET' depending on your server-side implementation
+                data: { brandID: selectedBrandID }, // Send the selected Brand ID as a parameter
+                success: function (data) {
+                    // Clear and populate the IDSupplier dropdown with the received data
+                    var IDSupplierDropdown = $('#IDSupplier');
+                    IDSupplierDropdown.empty();
+                    var flag = 0;
+                    // Iterate through the received data and populate the dropdown
+                    $.each(data, function (index, supplier) {
+                        IDSupplierDropdown.append($('<option></option>').attr('value', supplier.ID).text(supplier.Description));
+                        if (flag === 0) {
+                            option.attr('selected', 'selected');
+                            flag = 1;
+                        }
+                    });
+                     var selectedSupplierID = '@Model.IDSupplier'; // Convert the Model.IDSupplier to a string
+
+if (selectedSupplierID !== 'null') {
+    $('#IDSupplier').val(selectedSupplierID);
+}
+                },
+                error: function () {
+                    // Handle errors, if any
+                }
+            });
+        }
+        if (editoption === 0) {
+            appendProductToTable();
+        } else {
+
+        }
+
+        // Handle the change event of the IDBrand dropdown
+        $('#IDBrand').change(function () {
+            var selectedBrandID = $(this).val(); // Get the selected Brand ID
+            if (selectedBrandID !== "") {
+                // Make an AJAX request to the server to fetch suppliers by brand
+                $.ajax({
+                    url: '/Order/GetSuppliersByBrand', // Replace with the actual URL to your controller action
+                    type: 'POST', // or 'GET' depending on your server-side implementation
+                    data: { brandID: selectedBrandID }, // Send the selected Brand ID as a parameter
+                    success: function (data) {
+                        // Clear and populate the IDSupplier dropdown with the received data
+                        var IDSupplierDropdown = $('#IDSupplier');
+                        IDSupplierDropdown.empty();
+
+                        // Iterate through the received data and populate the dropdown
+                        $.each(data, function (index, supplier) {
+                            IDSupplierDropdown.append($('<option></option>').attr('value', supplier.ID).text(supplier.Description));
+                        });
+                    },
+                    error: function () {
+                        // Handle errors, if any
+                    }
+                });
+            }
+        });
+    });
+    document.getElementById('copiabutton').addEventListener('click', function () {
+        const content = document.getElementById('receipt'); // Get the specific div by its ID
+
+        html2canvas(content, {
+            backgroundColor: '#ffffff' // Set the background as white
+        }).then(canvas => {
+            const imgData = canvas.toDataURL('image/jpeg');
+
+            const pdf = new jsPDF();
+            pdf.addImage(imgData, 'JPEG', 65, 0, 80, 70); // Adding the image to the PDF
+            pdf.save('CIAO.pdf'); // Save the generated PDF
+        });
+    });
+
+
+
+    $("#actionButton").click(function () {
+        var id = '@Model.ID';
+        var selectedBrandName = $("#IDBrand option:selected").text();
+        var selectedTarga = $("#Plate").val();
+        var selectedTelaio = $("#Chassis").val();
+        if (selectedTarga === null || selectedTarga.trim() === "") {
+            alert("Targa cannot be empty. Please fill in the Targa field.");
+            return; // Stop the form submission
+        }
+        // Update the corresponding elements in the modal
+        $("#selectedBrandName").text("Marca: " + selectedBrandName);
+        $("#selectedTarga").text("Targa: " + selectedTarga);
+        if (selectedTelaio !== null && selectedTelaio !== "") {
+            $("#selectedTelaio").text("Telaio: " + selectedTelaio);
+        } else {
+            // If Telaio is null or empty, hide the corresponding element
+            $("#selectedTelaio").hide();
+        }
+        var selectedRowsHtml = "";
+
+        if (id !== '0') {
+            debugger
+            var description = $('#descriptionupdate').text();
+            var orderCode = $('#codeupdate').text();
+            var quantita = $('#quantityupdate').text();
+
+                selectedRowsHtml += `
+            <tr>
+                <td>${orderCode}</td>
+                <td>${description}</td>
+                <td>${quantita}</td>
+            </tr>`;
+
+        } else {
+            $('#ProductsTable tbody tr').each(function () {
+                var description = $(this).find('td:eq(3) input').val();
+                var orderCode = $(this).find('td:eq(1) input').val();
+                var quantita = $(this).find('td:eq(2) input').val();
+
+                selectedRowsHtml += `
+            <tr>
+                 <td>${orderCode}</td>
+                <td>${description}</td>
+                <td>${quantita}</td>
+            </tr>`;
+            });
+        }
+
+
+
+
+        // Update the table body in the modal with the collected rows
+        $("#selectedRowsTableBody").html(selectedRowsHtml);
+
+        // Get the selected branch from the dropdown
+        var selectedBranch = $("#IDBranch option:selected").text();
+        $("#selectedBranch").text("Filiale: " + selectedBranch);
+
+        // Show the confirmation modal
+        $("#confirmationModal").modal("show");
+    });
+    function populateSupplierInfoModal(supplierInfo) {
+        // Update the content of the supplier information modal
+        var supplierInfoContent = $("#supplierInfoContent");
+        if (supplierInfo.Contact === "Telephone") {
+            // Display "Contact Supplier on Telephone" label and the telephone number
+            supplierInfoContent.html('<p>Contact Supplier on Telephone: ' + supplierInfo.Telephone + '</p>');
+        } else if (supplierInfo.Contact === "WhatsApp") {
+            // Display "Contact Supplier on WhatsApp" label and the WhatsApp number
+            supplierInfoContent.html('<p>Contact Supplier on WhatsApp: ' + supplierInfo.Whatsapp + '</p>');
+        } else {
+            // Display a message if the specified contact method is not available
+            supplierInfoContent.html('<p>Supplier has been informaed thorugh the email.</p>');
+        }
+
+        // Show the supplier information modal
+        $("#supplierInfoModal").modal("show");
+    }
+    function convertToUppercase(input) {
+        input.value = input.value.toUpperCase();
+    }
+    $("#confirmSaveButton").click(function () {
+        // Hide the confirmation modal
+        $("#confirmationModal").modal("hide");
+        $("#actionButton").attr("disabled", "disabled");
+        var selectedSupplierId = $("#IDSupplier").val();
+
+        // Make an AJAX request to fetch supplier information
+
+        showLoadingSpinner();
+        var products = [];
+        $('#ProductsTable tbody tr').each(function () {
+            var product = {
+                ItemId: $(this).find('td:eq(1) input').val(),
+                Quantity: $(this).find('td:eq(2) input').val(),
+                Name: $(this).find('td:eq(3) input').val(),
+                Note: $(this).find('td:eq(4) input').val(),
+                Date: $(this).find('td:eq(5) input').val(),
+            };
+
+            products.push(product);
+        });
+        var productsJson = JSON.stringify(products);
+		$.ajax({
+			url: '@Url.Action("Action", "Order")',
+			type: "post",
+			data: $("#actionForm").serialize()
+		})
+            .done(function (response) {
+			if(response.success)
+			{
+				 $.ajax({
+			url: '@Url.Action("ActionProducts", "Order")',
+			type: "post",
+            data: { products: productsJson}, // Send serialized string as parameter
+        })
+            .done(function (response) {
+			if(response.success)
+            {
+                hideLoadingSpinner();
+                $.ajax({
+                    url: '/Order/GetSupplierInfo', // Replace with the actual URL
+                    type: 'GET',
+                    data: { supplierId: selectedSupplierId },
+                    success: function (data) {
+                        // Populate the supplier information in the second modal
+                        populateSupplierInfoModal(data);
+                    },
+                    error: function () {
+                        // Handle errors, if any
+                    }
+                });
+
+			}
+			else {
+				$(".errorDiv").html(response.Message);
+                }
+            });
+			}
+			else {
+				$(".errorDiv").html(response.Message);
+			}
+		});
+    });
+
+    $("#supplierInfoModal").on("hidden.bs.modal", function () {
+        debugger
+        // Redirect to the Order controller's Index action
+        window.location.href = '/Order/Index'; // Update the URL as needed
+    });
+
+    var productCounter = 1; // Initialize the product counter with 1
+
+    // Function to append a new product row to the table
+    function appendProductToTable() {
+        var lastSerialNumber = $('#ProductsTable tbody tr:last .serial-number').text().replace('#', '');
+
+        // If there are no rows, start with 1; otherwise, increment the last serial number
+        if (lastSerialNumber === '') {
+            lastSerialNumber = 0;
+        }
+
+        // Calculate the next serial number
+        var nextSerialNumber = parseInt(lastSerialNumber, 10) + 1;
+        var row = `
+        <tr>
+            <td class="serial-number">#${nextSerialNumber}</td>
+            <td><input type="text" id="OrderCode_${productCounter}" class="form-control form-control-sm input-sm-custom order-code-input" /></td>
+            <td><input type="text" id="Quantita_${productCounter}" class="form-control form-control-sm input-sm-custom" /></td>
+            <td><input type="text" id="Description_${productCounter}" class="form-control" /></td>
+            <td><input type="text" id="Note_${productCounter}" class="form-control form-control-lg" /></td>
+            <td><button class="btn btn-danger remove-row">Remove</button></td>
+        </tr>
+    `;
+
+        $('#ProductsTable tbody').append(row);
+        productCounter++; // Increment the product counter for the next row
+    }
+    function getCurrentDate() {
+        var today = new Date();
+        var year = today.getFullYear();
+        var month = String(today.getMonth() + 1).padStart(2, '0'); // Month is zero-based, so add 1 and pad with 0 if necessary
+        var day = String(today.getDate()).padStart(2, '0');
+        return `${year}-${month}-${day}`;
+    }
+    // Attach a click event handler to remove rows and update serial numbers
+    $('#ProductsTable tbody').on('click', '.remove-row', function () {
+        $(this).closest('tr').remove(); // Remove the current row
+        updateSerialNumbers(); // Update serial numbers for remaining rows
+    });
+
+    // Function to update serial numbers
+    function updateSerialNumbers() {
+        $('#ProductsTable tbody tr').each(function (index) {
+            $(this).find('.serial-number').text('#' + (index + 1));
+        });
+    }
+
+    // Attach a click event handler to the "Add Item" button
+    $('#AddItemButton').click(function () {
+        appendProductToTable();
+    });
+   $("#PhotoUpload").change(function () {
+        var element = this;
+        var formData = new FormData();
+
+        var totalFiles = element.files.length;
+
+        for (var i = 0; i < totalFiles; i++) {
+            var file = element.files[i];
+            formData.append("Photo", file);
+        }
+
+        $.ajax({
+            type: 'POST',
+            url: '@Url.Action("UploadPhotos", "Shared")',
+            data: formData,
+            dataType: 'json',
+            contentType: false,
+            processData: false
+        })
+            .done(function (response) {
+
+                console.log(response);
+                if (response.Success) {
+                    $("#Photo").val(response.DocURL);
+                    $("#PhotoImg").attr("src", response.DocURL);
+
+                }
+
+            })
+            .fail(function (XMLHttpRequest, textStatus, errorThrown) {
+                alert("FAIL");
+            })
+    });
+</script>
