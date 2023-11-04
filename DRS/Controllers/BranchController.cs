@@ -269,6 +269,12 @@ namespace DRS.Controllers
         [HttpPost]
         public ActionResult Delete(BranchActionViewModel model)
         {
+            var orders = OrderServices.Instance.GetOrder().Where(x => x.IDBranch == model.ID);
+            if (orders.Count() != 0)
+            {
+                return Json(new { success = false, Message = "Impossibile eliminare il ramo  poiché è presente nell'ordine attivo. Elimina prima l'ordine!" });
+            }
+
             if (model.ID != 0)
             {
                 var Branch = BranchServices.Instance.GetBranchById(model.ID);

@@ -224,6 +224,17 @@ namespace DRS.Controllers
         [HttpPost]
         public ActionResult Delete(BrandActionViewModel model)
         {
+            var supplierbrand = Supplier_BrandServices.Instance.GetSupplier_Brand().Where(x => x.IDBrand == model.ID);
+            if (supplierbrand.Count() != 0)
+            {
+                return Json(new { success = false, Message = "Impossibile eliminare il marchio  perché è presente nel Fornitore/Marchio attivo. Elimina prima la relazione fornitore/marchio!" });
+            }
+
+            var orders = OrderServices.Instance.GetOrder().Where(x => x.IDBrand == model.ID);
+            if (orders.Count() != 0)
+            {
+                return Json(new { success = false, Message = "Impossibile eliminare il marchio  poiché è presente nell'ordine attivo. Elimina prima l'ordine!" });
+            }
             if (model.ID != 0)
             {
                 var Brand = BrandServices.Instance.GetBrandById(model.ID);

@@ -105,9 +105,18 @@
                 <div class="col-md-12">
                     <div class="form-group row">
                         <label class="col-sm-3 col-form-label">Filiale</label>
-                        <div class="col-sm-9">
-                            @Html.TextBoxFor(m => m.Branch, new { @class = "form-control" })
-                        </div>
+                        <select class="form-control col-md-9" name="Branch" id="Branch">
+                            @if(Model.branches != null){
+                            foreach (var item in Model.branches)
+                            {
+                                <option value="@item.ID">@item.Description</option>
+                            }
+                            }
+
+                        </select>
+                        @*<div class="col-sm-9">
+            @Html.TextBoxFor(m => m.Branch, new { @class = "form-control" })
+        </div>*@
 
 
                     </div>

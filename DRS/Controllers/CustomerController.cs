@@ -299,6 +299,12 @@ namespace DRS.Controllers
         [HttpPost]
         public ActionResult Delete(CustomerActionViewModel model)
         {
+            var orders = OrderServices.Instance.GetOrder().Where(x => x.IDBranch == model.ID);
+            if (orders.Count() != 0)
+            {
+                return Json(new { success = false, Message = "Impossibile eliminare il cliente poiché è presente nell'ordine attivo. Elimina prima l'ordine!" });
+            }
+
             if (model.ID != 0)
             {
                 var Customer = CustomerServices.Instance.GetCustomerById(model.ID);

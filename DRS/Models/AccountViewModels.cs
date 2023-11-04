@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNet.Identity.EntityFramework;
+﻿using DRS.Entities;
+using Microsoft.AspNet.Identity.EntityFramework;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 
@@ -107,7 +108,7 @@ namespace DRS.Models
         public List<IdentityRole> Roles { get; set; }
         public string RoleID { get; set; }
 
-
+        public List<Branch> branches { get; set; }
     }
 
     public class ResetPasswordViewModel

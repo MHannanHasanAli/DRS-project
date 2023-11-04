@@ -214,7 +214,7 @@ namespace DRS.Controllers
 
                             var role = RolesManager.FindByIdAsync(user.RoleID);
                             var UserToBeSaved = new User { UserName = user.Name, Email = user.Name + "@DRS.com", Surname = user.Surname, Branch = user.Branch, Name = user.Name, Role = role.Result.Name, Password = user.Password, Image = user.Image };
-                            var rolesAll = rolesList.Select(x => x.Id).ToList();
+                            var rolesAll = rolesList.Select(x => x.Name).ToList();
                             if (rolesAll.Contains(UserToBeSaved.Role))
                             {
                                 UserManager.CreateAsync(UserToBeSaved, user.Password);
@@ -264,6 +264,7 @@ namespace DRS.Controllers
         public ActionResult Register(RegisterViewModel model)
         {
             model.Roles = RolesManager.Roles.ToList();
+            model.branches = BranchServices.Instance.GetBranchs();
             return PartialView("_Register", model);
         }
 

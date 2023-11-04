@@ -402,6 +402,8 @@ namespace DRS.Controllers
 
             return View("ConfirmedOrders", model);
         }
+
+        static DateTime savedDate;
         [HttpGet]
         public ActionResult Action(int ID = 0)
         {
@@ -429,6 +431,7 @@ namespace DRS.Controllers
                 model.Chassis = Order.Chassis;
                 model.IDUser = Order.IDUser;
                 model.Date = Order.Date;
+                savedDate = Order.Date;
                 model.Photo = Order.File;
                 
                 if(model.Date != null)
@@ -495,7 +498,7 @@ namespace DRS.Controllers
                 Order.Plate = model.Plate;
                 Order.Chassis = model.Chassis;
                 Order.IDUser = user.Name;
-                Order.Date = DateTime.Now;
+                Order.Date = savedDate;
                 Order.DeliveryDate = model.DeliveryDate;
                 Order.Reminder1 = model.Reminder1;
                 Order.Reminder2 = model.Reminder2;

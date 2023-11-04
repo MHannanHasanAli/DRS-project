@@ -41,7 +41,8 @@
 				window.location.href = "@Url.Action("Index", "Branch")";
 			}
 			else {
-				$(".errorDiv").html(response.Message);
+                hideLoadingSpinner();
+                alert(response.Message);
 			}
 		});
 	});
